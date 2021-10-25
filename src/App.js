@@ -1,13 +1,37 @@
+import {Component} from 'react'
 import './App.css'
 
-const btnText = 'Print'
+const Header = () => {
+  return <h2>Hello World!</h2>
+}
+
+// const Field = () => {
+//   return <input 
+//             placeholder='Type here' 
+//             type='text' />
+// }
+
+class Field extends Component {
+  render() {
+    return <input 
+            placeholder='Type here' 
+            type='text' />
+  }
+}
+
+function Btn() {
+  const res = () => 'Log in'
+  const logged = false
+
+  return <button>{logged ? 'Log out' : res()}</button>
+}
 
 function App() {
   return (
     <div className='App'>
-      <h2 className = 'cls'>Text: {`${new Date()}`}</h2>
-      <input type={'text'} />
-      <button>{btnText}</button>
+      <Header/>
+      <Field/>
+      <Btn/>
     </div>
   )
 }
