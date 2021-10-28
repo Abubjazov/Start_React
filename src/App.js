@@ -1,39 +1,21 @@
-import { Component, StrictMode } from 'react'
 import './App.css'
 
-const Header = () => {
-  return <h2>Hello World!</h2>
-}
-
-// const Field = () => {
-//   return <input 
-//             placeholder='Type here' 
-//             type='text' />
-// }
-
-class Field extends Component {
-  render() {
-    return <input 
-            placeholder='Type here' 
-            type='text' />
-  }
-}
-
-function Btn() {
-  const res = () => 'Log in'
-  const logged = false
-
-  return <button>{logged ? 'Log out' : res()}</button>
+function WhoAmI (props) {
+  return (
+    <div>
+      <h1>My name is {props.name}, surname is {props.surname}</h1>
+      <a href={props.link} target="_blank" rel="noreferrer">My profile</a>
+    </div>
+  )
 }
 
 function App() {
   return (
-    <div className='App'>
-      <StrictMode>
-        <Header/>
-        <Field/>
-        <Btn/>
-      </StrictMode>  
+    <div className="App">
+       <WhoAmI 
+        name="John"
+        surname="Smith"
+        link="https://getbootstrap.com/"/>
     </div>
   )
 }
