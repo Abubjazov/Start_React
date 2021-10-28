@@ -6,25 +6,40 @@ class WhoAmI extends Component {
     super(props)
     this.state = {
       age: 27,
-      btnText: '+'
+      btnText: '+',
+      inputVal: 'input'
     }
+    
+    this.addAge = this.addAge.bind(this)
   }
 
-  addAge = () => {
+  addAge() {
     this.setState(state => ({
         age: state.age + 1,
         btnText: '?'
     }))
   }
 
+  commitInputChanges = (e) => {
+    this.setState({
+      inputVal: e.target.value
+    })
+  }
+
   render() {
     const {name, surname, link} = this.props
+    const {age, inputVal} = this.state
 
     return (
       <div>
-        <h1>My name is {name}, surname is {surname}, age: {this.state.age}</h1>
+        <h1>My name is {name}, surname is {surname}, 
+        age: {age}, IV: {inputVal}</h1>
         <a href={link} target="_blank" rel="noreferrer">My profile</a>
         <button onClick={this.addAge}>{this.state.btnText}</button>
+        <form>
+          <span>Input</span>
+          <input type="text" onChange={this.commitInputChanges} />
+        </form>
       </div>
     )
   }
