@@ -9,18 +9,19 @@ class WhoAmI extends Component {
       btnText: '+',
       inputVal: 'input'
     }
-    
-    this.addAge = this.addAge.bind(this)
+
+    // this.addAge = this.addAge.bind(this)
   }
 
-  addAge() {
+  addAge = () => {
     this.setState(state => ({
         age: state.age + 1,
         btnText: '?'
     }))
   }
 
-  commitInputChanges = (e) => {
+  commitInputChanges = (e, color) => {
+    console.log(color)
     this.setState({
       inputVal: e.target.value
     })
@@ -36,9 +37,10 @@ class WhoAmI extends Component {
         age: {age}, IV: {inputVal}</h1>
         <a href={link} target="_blank" rel="noreferrer">My profile</a>
         <button onClick={this.addAge}>{this.state.btnText}</button>
+        {/* <button onClick={() => this.addAge()}>{this.state.btnText}</button> */}
         <form>
           <span>Input</span>
-          <input type="text" onChange={this.commitInputChanges} />
+          <input type="text" onChange={(e) => this.commitInputChanges(e, 'some color')} />
         </form>
       </div>
     )
