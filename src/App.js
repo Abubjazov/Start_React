@@ -1,6 +1,25 @@
 import { Component } from 'react'
+import styled from 'styled-components'
 import './App.css'
 
+const EmpItem = styled.div`
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
+`
+
+const Header = styled.h2`
+  font-size: 22px
+`
+
+const Button = styled.button`
+  display: block;
+  padding: 5px 15px;
+  background-color: gold;
+  border: 1px solid rgba(0, 0, 0, .2);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
+`
 class WhoAmI extends Component {
   constructor (props) {
     super(props)
@@ -32,29 +51,34 @@ class WhoAmI extends Component {
     const {age, inputVal} = this.state
 
     return (
-      <div>
-        <h1>My name is {name}, surname is {surname}, 
-        age: {age}, IV: {inputVal}</h1>
+      <EmpItem>
+        <Header>My name is {name}, surname is {surname}, 
+        age: {age}, IV: {inputVal}</Header>
         <a href={link} target="_blank" rel="noreferrer">My profile</a>
-        <button onClick={this.addAge}>{this.state.btnText}</button>
+        <Button onClick={this.addAge}>{this.state.btnText}</Button>
         {/* <button onClick={() => this.addAge()}>{this.state.btnText}</button> */}
         <form>
           <span>Input</span>
           <input type="text" onChange={(e) => this.commitInputChanges(e, 'some color')} />
         </form>
-      </div>
+      </EmpItem>
     )
   }
 }
 
+const Wrapper = styled.div`
+  width: 600px;
+  margin: 80px auto 0 auto;
+`
+
 function App() {
   return (
-    <div className="App">
+    <Wrapper>
       <WhoAmI 
         name="John"
         surname="Smith"
         link="https://getbootstrap.com/"/>
-    </div>
+    </Wrapper>
   )
 }
 
