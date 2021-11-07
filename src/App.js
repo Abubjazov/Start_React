@@ -35,6 +35,45 @@ const DynamicGreating = (props) => {
   )
 }
 
+const HelloGreating = () => {
+  return (
+    <div style={{'width': '600px', 'margin': '0 auto'}}>
+      <DynamicGreating color={'primary'}>
+        <h2>Hello world!</h2>
+      </DynamicGreating>
+    </div>
+  )
+}
+
+const Message = (props) => {
+  return (
+    <h2>The counter: {props.counter}</h2>
+  )
+}
+
+class Counter extends Component {
+  state = {
+    counter: 0
+  }
+
+  addCounter = () => {
+    this.setState(({counter}) => ({
+      counter:  counter + 1
+    }))
+  }
+
+  render() {
+    return (
+      <>
+        <button
+          className={'btn btn-primary'}
+          onClick={this.addCounter}></button>
+          {this.props.render(this.state.counter)}
+      </>
+    )
+  }
+}
+
 class WhoAmI extends Component {
   constructor (props) {
     super(props)
@@ -67,6 +106,10 @@ class WhoAmI extends Component {
 
     return (
       <EmpItem>
+
+        <Counter render={counter => (<Message counter={counter} />)}/>
+
+        <HelloGreating />
 
         <BootstrapTest 
         left={
