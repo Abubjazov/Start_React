@@ -1,5 +1,6 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
+import { BootstrapTest } from './BootstrapTest'
 import './App.css'
 
 const EmpItem = styled.div`
@@ -20,6 +21,20 @@ const Button = styled.button`
   border: 1px solid rgba(0, 0, 0, .2);
   box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
 `
+
+const DynamicGreating = (props) => {
+  return (
+    <div className={'mb-3 p-3 border border-' + props.color}>
+      {/* {props.children} */}
+      {
+        React.Children.map(props.children, child => {
+          return React.cloneElement(child, {className: 'shadow p-3 m-3 border rounded'})
+        })
+      }
+    </div>
+  )
+}
+
 class WhoAmI extends Component {
   constructor (props) {
     super(props)
@@ -52,6 +67,21 @@ class WhoAmI extends Component {
 
     return (
       <EmpItem>
+
+        <BootstrapTest 
+        left={
+          <DynamicGreating color={'primary'}>
+            <h2>This weel was hard</h2>
+            <h2>Hello world!</h2>
+          </DynamicGreating>
+        }
+        right={
+          <DynamicGreating color={'primary'}>
+            <h2>RIGHT!!!</h2>
+          </DynamicGreating>
+        }
+        />
+
         <Header>My name is {name}, surname is {surname}, 
         age: {age}, IV: {inputVal}</Header>
         <a href={link} target="_blank" rel="noreferrer">My profile</a>
