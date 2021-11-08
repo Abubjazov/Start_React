@@ -1,4 +1,4 @@
-import {Component, useState} from 'react'
+import {Component, useState, useEffect} from 'react'
 import {Container} from 'react-bootstrap'
 import './App.css'
 
@@ -10,6 +10,14 @@ class Slider extends Component {
             autoplay: false,
             slide: 0
         }
+    }
+
+    componentDidMount() {
+      document.title = `Slide: ${this.state.slide}`
+    }
+
+    componentDidUpdate() {
+      document.title = `Slide: ${this.state.slide}`
     }
 
     changeSlide = (i) => {
@@ -52,7 +60,20 @@ const Slider2 = () => {
     const [slide, setSlide] = useState(0)
     const [autoplay, setAutoplay] = useState(false)
 
+    const logger = () => {
+      console.log('Some log string')
+    } 
 
+    useEffect(() => {
+      console.log('useEffect')
+      document.title = `Slide: ${slide}`
+
+      window.addEventListener('click', logger)
+
+      return () => {
+        window.removeEventListener('click', logger)
+      }
+    }, [slide])
 
     return (
         <Container>
@@ -77,10 +98,14 @@ const Slider2 = () => {
 
 
 function App() {
+  const [slider, setSlider] = useState(true)
+
   return (
     <>
         <Slider/>
-        <Slider2/>
+        
+        <button onClick={() => setSlider(!slider)}>Click Meeeeee</button>
+        {slider ? <Slider2/> : null}
     </>
   )
 }
