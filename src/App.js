@@ -1,116 +1,187 @@
-import {Component, useState, useEffect} from 'react'
-import {Container} from 'react-bootstrap'
+import {useState, useEffect} from 'react'
+import { Badge, Button, ButtonGroup, Container } from 'react-bootstrap'
+
 import './App.css'
 
-class Slider extends Component {
+class ExchangerService {
+  _apiBase = 'https://www.cbr-xml-daily.ru/latest.js'
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            autoplay: false,
-            slide: 0
-        }
+  getResource = async (url) => {
+    let res = await fetch(url)
+
+    if (!res.ok) {
+        throw new Error(`Could not fetch ${url}, status: ${res.status}`)
     }
 
-    componentDidMount() {
-      document.title = `Slide: ${this.state.slide}`
-    }
+    return await res.json()
+  }
 
-    componentDidUpdate() {
-      document.title = `Slide: ${this.state.slide}`
-    }
+  getRates = async (cur) => {
+      const res = await this.getResource(`${this._apiBase}`)
 
-    changeSlide = (i) => {
-        this.setState(({slide}) => ({
-            slide: slide + i
-        }))
-    }
-
-    toggleAutoplay = () => {
-        this.setState(({autoplay}) => ({
-            autoplay: !autoplay
-        }))
-    }
-
-    render() {
-        return (
-            <Container>
-                <div className="slider w-50 m-auto">
-                    <img className="d-block w-100" src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg" alt="slide" />
-                    <div className="text-center mt-5">Active slide {this.state.slide} <br/> {this.state.autoplay ? 'auto' : null}</div>
-                    <div className="buttons mt-3">
-                        <button 
-                            className="btn btn-primary me-2"
-                            onClick={() => this.changeSlide(-1)}>-1</button>
-                        <button 
-                            className="btn btn-primary me-2"
-                            onClick={() => this.changeSlide(1)}>+1</button>
-                        <button 
-                            className="btn btn-primary me-2"
-                            onClick={this.toggleAutoplay}>toggle autoplay</button>
-                    </div>
-                </div>
-            </Container>
-        )
-    }
+      return res.rates[cur]
+  }
 }
 
+const loadData = new ExchangerService()
 
-const Slider2 = () => {
-    const [slide, setSlide] = useState(0)
-    const [autoplay, setAutoplay] = useState(false)
+const Exchanger = () => {
+    const [rate, setRate] = useState(0)
 
-    const logger = () => {
-      console.log('Some log string')
-    } 
+    const loadCurrency = (cur) => {
+      loadData
+            .getRates(cur)
+            .then(data => setRate(((1 - data) / data).toFixed(4)))
+    }
 
-    useEffect(() => {
-      console.log('useEffect')
-      document.title = `Slide: ${slide}`
-
-      window.addEventListener('click', logger)
-
-      return () => {
-        window.removeEventListener('click', logger)
-      }
-    }, [slide])
+    // useEffect(() => {
+    //   console.log('useEffect')
+    //   document.querySelector('h1').innerText = rate
+    // }, [rate])
 
     return (
         <Container>
-            <div className="slider w-50 m-auto">
-                <img className="d-block w-100" src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg" alt="slide" />
-                <div className="text-center mt-5">Active slide {slide} <br/> {autoplay ? 'auto' : null}</div>
-                <div className="buttons mt-3">
-                    <button 
-                        className="btn btn-primary me-2"
-                        onClick={() => setSlide(slide => slide - 1)}>-1</button>
-                    <button 
-                        className="btn btn-primary me-2"
-                        onClick={() => setSlide(slide => slide + 1)}>+1</button>
-                    <button 
-                        className="btn btn-primary me-2"
-                        onClick={() => setAutoplay(autoplay => !autoplay)}>toggle autoplay</button>
-                </div>
-            </div>
+          <ButtonGroup size="lg" className="mb-2 mt-3">
+            <Button
+              onClick={() => loadCurrency('USD')}>USD</Button>
+            <Button
+              onClick={() => loadCurrency('EUR')}>EUR</Button>
+            <Button
+              onClick={() => loadCurrency('GBP')}>GBP</Button>
+          </ButtonGroup>
+          <h1>
+            {rate} <Badge bg="secondary">RUB</Badge>
+          </h1>
         </Container>
     )
 }
 
 
 function App() {
-  const [slider, setSlider] = useState(true)
-
   return (
     <>
-        <Slider/>
-        
-        <button onClick={() => setSlider(!slider)}>Click Meeeeee</button>
-        {slider ? <Slider2/> : null}
+      <Exchanger />
     </>
   )
 }
 
 export default App
+
+
+
+// import {Component, useState, useEffect} from 'react'
+// import {Container} from 'react-bootstrap'
+// import './App.css'
+
+// class Slider extends Component {
+
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             autoplay: false,
+//             slide: 0
+//         }
+//     }
+
+//     componentDidMount() {
+//       document.title = `Slide: ${this.state.slide}`
+//     }
+
+//     componentDidUpdate() {
+//       document.title = `Slide: ${this.state.slide}`
+//     }
+
+//     changeSlide = (i) => {
+//         this.setState(({slide}) => ({
+//             slide: slide + i
+//         }))
+//     }
+
+//     toggleAutoplay = () => {
+//         this.setState(({autoplay}) => ({
+//             autoplay: !autoplay
+//         }))
+//     }
+
+//     render() {
+//         return (
+//             <Container>
+//                 <div className="slider w-50 m-auto">
+//                     <img className="d-block w-100" src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg" alt="slide" />
+//                     <div className="text-center mt-5">Active slide {this.state.slide} <br/> {this.state.autoplay ? 'auto' : null}</div>
+//                     <div className="buttons mt-3">
+//                         <button 
+//                             className="btn btn-primary me-2"
+//                             onClick={() => this.changeSlide(-1)}>-1</button>
+//                         <button 
+//                             className="btn btn-primary me-2"
+//                             onClick={() => this.changeSlide(1)}>+1</button>
+//                         <button 
+//                             className="btn btn-primary me-2"
+//                             onClick={this.toggleAutoplay}>toggle autoplay</button>
+//                     </div>
+//                 </div>
+//             </Container>
+//         )
+//     }
+// }
+
+
+// const Slider2 = () => {
+//     const [slide, setSlide] = useState(0)
+//     const [autoplay, setAutoplay] = useState(false)
+
+//     const logger = () => {
+//       console.log('Some log string')
+//     } 
+
+//     useEffect(() => {
+//       console.log('useEffect')
+//       document.title = `Slide: ${slide}`
+
+//       window.addEventListener('click', logger)
+
+//       return () => {
+//         window.removeEventListener('click', logger)
+//       }
+//     }, [slide])
+
+//     return (
+//         <Container>
+//             <div className="slider w-50 m-auto">
+//                 <img className="d-block w-100" src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg" alt="slide" />
+//                 <div className="text-center mt-5">Active slide {slide} <br/> {autoplay ? 'auto' : null}</div>
+//                 <div className="buttons mt-3">
+//                     <button 
+//                         className="btn btn-primary me-2"
+//                         onClick={() => setSlide(slide => slide - 1)}>-1</button>
+//                     <button 
+//                         className="btn btn-primary me-2"
+//                         onClick={() => setSlide(slide => slide + 1)}>+1</button>
+//                     <button 
+//                         className="btn btn-primary me-2"
+//                         onClick={() => setAutoplay(autoplay => !autoplay)}>toggle autoplay</button>
+//                 </div>
+//             </div>
+//         </Container>
+//     )
+// }
+
+
+// function App() {
+//   const [slider, setSlider] = useState(true)
+
+//   return (
+//     <>
+//         <Slider/>
+        
+//         <button onClick={() => setSlider(!slider)}>Click Meeeeee</button>
+//         {slider ? <Slider2/> : null}
+//     </>
+//   )
+// }
+
+// export default App
 
 
 
