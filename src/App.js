@@ -1,15 +1,12 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Container } from 'react-bootstrap'
 import './App.css'
 
-// const getSomeImages = () => {
-//   console.log('fetching')
+const countTotal = (num) => {
+  console.log("counting...")
 
-//   return [
-//     "http://s.ekabu.ru/localStorage/post/e7/6a/b7/ab/e76ab7ab_resizedScaled_740to775.jpg",
-//     "https://im0-tub-ru.yandex.net/i?id=dc7361b95e9b0527c543cbb558a72055-l&n=27&h=384&w=480"
-//   ]
-// }
+  return num + 10
+}
 
 
 const Slider = () => {
@@ -26,21 +23,26 @@ const Slider = () => {
     ]
   }, [])
 
+  const total = useMemo(() => {
+    countTotal(slide)
+  }, [slide])
+
+  const style = useMemo(() => ({
+    color: slide > 4 ? 'red' : 'green'
+  }), [slide])
+
+  useEffect(() => {
+    console.log('style!')
+  }, [style])
+
   return (
     <Container>
       <div className="slider w-50 m-auto">
 
-        {/* {
-          getSomeImages().map((url, index) => {
-            return (
-              <img key={index} className="d-block w-100" src={url} alt="slide" />
-            )
-          })
-        } */}
-
         <Slide getSomeImages={getSomeImages} />
 
         <div className="text-center mt-5">Active slide {slide} <br /> {autoplay ? 'auto' : null}</div>
+        <div style={style} className="text-center mt-5">Total slides {total} <br /></div>
         <div className="buttons mt-3">
           <button
             className="btn btn-primary me-2"
