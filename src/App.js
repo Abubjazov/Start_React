@@ -1,88 +1,134 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import './App.css'
 
-const countTotal = (num) => {
-  console.log("counting...")
+const Form = () => {
+  const [text, setText] = useState('')
 
-  return num + 10
-}
-
-
-const Slider = () => {
-  const [slide, setSlide] = useState(0)
-  const [autoplay, setAutoplay] = useState(false)
-
-  const getSomeImages = useCallback(() => {
-    console.log('fetching')
-
-
-    return [
-      "http://s.ekabu.ru/localStorage/post/e7/6a/b7/ab/e76ab7ab_resizedScaled_740to775.jpg",
-      "https://im0-tub-ru.yandex.net/i?id=dc7361b95e9b0527c543cbb558a72055-l&n=27&h=384&w=480"
-    ]
-  }, [])
-
-  const total = useMemo(() => {
-    countTotal(slide)
-  }, [slide])
-
-  const style = useMemo(() => ({
-    color: slide > 4 ? 'red' : 'green'
-  }), [slide])
+  const testRef = useRef(0)
 
   useEffect(() => {
-    console.log('style!')
-  }, [style])
+    testRef.current = text
+  })
 
   return (
     <Container>
-      <div className="slider w-50 m-auto">
-
-        <Slide getSomeImages={getSomeImages} />
-
-        <div className="text-center mt-5">Active slide {slide} <br /> {autoplay ? 'auto' : null}</div>
-        <div style={style} className="text-center mt-5">Total slides {total} <br /></div>
-        <div className="buttons mt-3">
-          <button
-            className="btn btn-primary me-2"
-            onClick={() => setSlide(slide => slide - 1)}>-1</button>
-          <button
-            className="btn btn-primary me-2"
-            onClick={() => setSlide(slide => slide + 1)}>+1</button>
-          <button
-            className="btn btn-primary me-2"
-            onClick={() => setAutoplay(autoplay => !autoplay)}>toggle autoplay</button>
+      <form className="w-50 border mt-5 p-3 m-auto">
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
+          <input onChange={(e) => setText(e.target.value)} type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
         </div>
-      </div>
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
+          <textarea value={testRef.current} className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+      </form>
     </Container>
   )
 }
 
-const Slide = ({ getSomeImages }) => {
-  const [images, setImages] = useState([])
-
-  useEffect(() => {
-    setImages(getSomeImages())
-  }, [getSomeImages])
-
-  return (
-    <>
-      {images.map((url, index) => <img key={index} className="d-block w-100" src={url} alt="slide" />)}
-    </>
-  )
-}
-
-
 function App() {
   return (
-    <>
-      <Slider />
-    </>
+    <Form />
   )
 }
 
 export default App
+
+
+
+
+
+
+
+
+
+
+
+// import { useState, useCallback, useEffect, useMemo } from 'react'
+// import { Container } from 'react-bootstrap'
+// import './App.css'
+
+// const countTotal = (num) => {
+//   console.log("counting...")
+
+//   return num + 10
+// }
+
+// const Slider = () => {
+//   const [slide, setSlide] = useState(0)
+//   const [autoplay, setAutoplay] = useState(false)
+
+//   const getSomeImages = useCallback(() => {
+//     console.log('fetching')
+
+
+//     return [
+//       "http://s.ekabu.ru/localStorage/post/e7/6a/b7/ab/e76ab7ab_resizedScaled_740to775.jpg",
+//       "https://im0-tub-ru.yandex.net/i?id=dc7361b95e9b0527c543cbb558a72055-l&n=27&h=384&w=480"
+//     ]
+//   }, [])
+
+//   const total = useMemo(() => {
+//     countTotal(slide)
+//   }, [slide])
+
+//   const style = useMemo(() => ({
+//     color: slide > 4 ? 'red' : 'green'
+//   }), [slide])
+
+//   useEffect(() => {
+//     console.log('style!')
+//   }, [style])
+
+//   return (
+//     <Container>
+//       <div className="slider w-50 m-auto">
+
+//         <Slide getSomeImages={getSomeImages} />
+
+//         <div className="text-center mt-5">Active slide {slide} <br /> {autoplay ? 'auto' : null}</div>
+//         <div style={style} className="text-center mt-5">Total slides {total} <br /></div>
+//         <div className="buttons mt-3">
+//           <button
+//             className="btn btn-primary me-2"
+//             onClick={() => setSlide(slide => slide - 1)}>-1</button>
+//           <button
+//             className="btn btn-primary me-2"
+//             onClick={() => setSlide(slide => slide + 1)}>+1</button>
+//           <button
+//             className="btn btn-primary me-2"
+//             onClick={() => setAutoplay(autoplay => !autoplay)}>toggle autoplay</button>
+//         </div>
+//       </div>
+//     </Container>
+//   )
+// }
+
+// const Slide = ({ getSomeImages }) => {
+//   const [images, setImages] = useState([])
+
+//   useEffect(() => {
+//     setImages(getSomeImages())
+//   }, [getSomeImages])
+
+//   return (
+//     <>
+//       {images.map((url, index) => <img key={index} className="d-block w-100" src={url} alt="slide" />)}
+//     </>
+//   )
+// }
+
+
+// function App() {
+//   return (
+//     <>
+//       <Slider />
+//     </>
+//   )
+// }
+
+// export default App
 
 
 
@@ -368,47 +414,47 @@ export default App
 
 
 
-// import React, {Component} from 'react'
-// import {Container} from 'react-bootstrap'
+// import React, { Component } from 'react'
+// import { Container } from 'react-bootstrap'
 // import './App.css'
 
 // class Form extends Component {
-//     // testRef = React.createRef()
+//   // testRef = React.createRef()
 
-//     // componentDidMount() {
-//     //   this.testRef.current.focus()
-//     // }
+//   // componentDidMount() {
+//   //   this.testRef.current.focus()
+//   // }
 
-//     setInputRef = elem => {
-//       this.testRef = elem
-//     }
+//   setInputRef = elem => {
+//     this.testRef = elem
+//   }
 
-//     focusFirst = () => {
-//       if (this.testRef) this.testRef.focus()
-//     }
+//   focusFirst = () => {
+//     if (this.testRef) this.testRef.focus()
+//   }
 
-//     render() {
-//         return (
-//             <Container>
-//                 <form className="w-50 border mt-5 p-3 m-auto">
-//                     <div className="mb-3">
-//                         <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
-//                         <input ref={this.setInputRef} type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com"/>
-//                     </div>
-//                     <div className="mb-3">
-//                         <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
-//                         <textarea onFocus={this.focusFirst} className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-//                     </div>
-//                 </form>
-//             </Container>
-//         )
-//     }
+//   render() {
+//     return (
+//       <Container>
+//         <form className="w-50 border mt-5 p-3 m-auto">
+//           <div className="mb-3">
+//             <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
+//             <input ref={this.setInputRef} type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+//           </div>
+//           <div className="mb-3">
+//             <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
+//             <textarea onFocus={this.focusFirst} className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+//           </div>
+//         </form>
+//       </Container>
+//     )
+//   }
 // }
 
 // function App() {
-//     return (
-//         <Form/>
-//     )
+//   return (
+//     <Form />
+//   )
 // }
 
 // export default App
