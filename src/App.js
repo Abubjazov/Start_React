@@ -1,71 +1,164 @@
-import {useState, useEffect} from 'react'
-import { Badge, Button, ButtonGroup, Container } from 'react-bootstrap'
-
+import { useState, useCallback, useEffect } from 'react'
+import { Container } from 'react-bootstrap'
 import './App.css'
 
-class ExchangerService {
-  _apiBase = 'https://www.cbr-xml-daily.ru/latest.js'
+// const getSomeImages = () => {
+//   console.log('fetching')
 
-  getResource = async (url) => {
-    let res = await fetch(url)
+//   return [
+//     "http://s.ekabu.ru/localStorage/post/e7/6a/b7/ab/e76ab7ab_resizedScaled_740to775.jpg",
+//     "https://im0-tub-ru.yandex.net/i?id=dc7361b95e9b0527c543cbb558a72055-l&n=27&h=384&w=480"
+//   ]
+// }
 
-    if (!res.ok) {
-        throw new Error(`Could not fetch ${url}, status: ${res.status}`)
-    }
 
-    return await res.json()
-  }
+const Slider = () => {
+  const [slide, setSlide] = useState(0)
+  const [autoplay, setAutoplay] = useState(false)
 
-  getRates = async (cur) => {
-      const res = await this.getResource(`${this._apiBase}`)
+  const getSomeImages = useCallback(() => {
+    console.log('fetching')
 
-      return res.rates[cur]
-  }
+
+    return [
+      "http://s.ekabu.ru/localStorage/post/e7/6a/b7/ab/e76ab7ab_resizedScaled_740to775.jpg",
+      "https://im0-tub-ru.yandex.net/i?id=dc7361b95e9b0527c543cbb558a72055-l&n=27&h=384&w=480"
+    ]
+  }, [])
+
+  return (
+    <Container>
+      <div className="slider w-50 m-auto">
+
+        {/* {
+          getSomeImages().map((url, index) => {
+            return (
+              <img key={index} className="d-block w-100" src={url} alt="slide" />
+            )
+          })
+        } */}
+
+        <Slide getSomeImages={getSomeImages} />
+
+        <div className="text-center mt-5">Active slide {slide} <br /> {autoplay ? 'auto' : null}</div>
+        <div className="buttons mt-3">
+          <button
+            className="btn btn-primary me-2"
+            onClick={() => setSlide(slide => slide - 1)}>-1</button>
+          <button
+            className="btn btn-primary me-2"
+            onClick={() => setSlide(slide => slide + 1)}>+1</button>
+          <button
+            className="btn btn-primary me-2"
+            onClick={() => setAutoplay(autoplay => !autoplay)}>toggle autoplay</button>
+        </div>
+      </div>
+    </Container>
+  )
 }
 
-const loadData = new ExchangerService()
+const Slide = ({ getSomeImages }) => {
+  const [images, setImages] = useState([])
 
-const Exchanger = () => {
-    const [rate, setRate] = useState(0)
+  useEffect(() => {
+    setImages(getSomeImages())
+  }, [getSomeImages])
 
-    const loadCurrency = (cur) => {
-      loadData
-            .getRates(cur)
-            .then(data => setRate(((1 - data) / data).toFixed(4)))
-    }
-
-    // useEffect(() => {
-    //   console.log('useEffect')
-    //   document.querySelector('h1').innerText = rate
-    // }, [rate])
-
-    return (
-        <Container>
-          <ButtonGroup size="lg" className="mb-2 mt-3">
-            <Button
-              onClick={() => loadCurrency('USD')}>USD</Button>
-            <Button
-              onClick={() => loadCurrency('EUR')}>EUR</Button>
-            <Button
-              onClick={() => loadCurrency('GBP')}>GBP</Button>
-          </ButtonGroup>
-          <h1>
-            {rate} <Badge bg="secondary">RUB</Badge>
-          </h1>
-        </Container>
-    )
+  return (
+    <>
+      {images.map((url, index) => <img key={index} className="d-block w-100" src={url} alt="slide" />)}
+    </>
+  )
 }
 
 
 function App() {
   return (
     <>
-      <Exchanger />
+      <Slider />
     </>
   )
 }
 
 export default App
+
+
+
+
+
+
+
+
+
+
+// import {useState, useEffect} from 'react'
+// import { Badge, Button, ButtonGroup, Container } from 'react-bootstrap'
+
+// import './App.css'
+
+// class ExchangerService {
+//   _apiBase = 'https://www.cbr-xml-daily.ru/latest.js'
+
+//   getResource = async (url) => {
+//     let res = await fetch(url)
+
+//     if (!res.ok) {
+//         throw new Error(`Could not fetch ${url}, status: ${res.status}`)
+//     }
+
+//     return await res.json()
+//   }
+
+//   getRates = async (cur) => {
+//       const res = await this.getResource(`${this._apiBase}`)
+
+//       return res.rates[cur]
+//   }
+// }
+
+// const loadData = new ExchangerService()
+
+// const Exchanger = () => {
+//     const [rate, setRate] = useState(0)
+
+//     const loadCurrency = (cur) => {
+//       loadData
+//             .getRates(cur)
+//             .then(data => setRate(((1 - data) / data).toFixed(4)))
+//     }
+
+//     // useEffect(() => {
+//     //   console.log('useEffect')
+//     //   document.querySelector('h1').innerText = rate
+//     // }, [rate])
+
+//     return (
+//         <Container>
+//           <ButtonGroup size="lg" className="mb-2 mt-3">
+//             <Button
+//               onClick={() => loadCurrency('USD')}>USD</Button>
+//             <Button
+//               onClick={() => loadCurrency('EUR')}>EUR</Button>
+//             <Button
+//               onClick={() => loadCurrency('GBP')}>GBP</Button>
+//           </ButtonGroup>
+//           <h1>
+//             {rate} <Badge bg="secondary">RUB</Badge>
+//           </h1>
+//         </Container>
+//     )
+// }
+
+
+// function App() {
+//   return (
+//     <>
+//       <Exchanger />
+//     </>
+//   )
+// }
+
+// export default App
 
 
 
@@ -174,7 +267,7 @@ export default App
 //   return (
 //     <>
 //         <Slider/>
-        
+
 //         <button onClick={() => setSlider(!slider)}>Click Meeeeee</button>
 //         {slider ? <Slider2/> : null}
 //     </>
@@ -230,7 +323,7 @@ export default App
 //                         <Message />
 //                       </Portal> : null
 //                     }
-                    
+
 //                 </form>
 //             </Container>
 //         )
