@@ -29,25 +29,35 @@ const Form = (props) => {
 }
 
 class InputComponent extends Component {
+  static contextType = dataContext
+
   render() {
     return (
-      <Consumer>
-        {
-          value => {
-            return (
-              <input
-                value={value.mail}
-                type="email"
-                className='form-control'
-                id="exampleFormControlInput1"
-                placeholder="name@example.com" />
-            )
-          }
-        }
-      </Consumer>
+      // <Consumer>
+      //   {
+      //     value => {
+      //       return (
+      //         <input
+      //           value={value.mail}
+      //           type="email"
+      //           className='form-control'
+      //           id="exampleFormControlInput1"
+      //           placeholder="name@example.com" />
+      //       )
+      //     }
+      //   }
+      // </Consumer>
+      <input
+        value={this.context.mail}
+        type="email"
+        className='form-control'
+        id="exampleFormControlInput1"
+        placeholder="name@example.com" />
     )
   }
 }
+
+// InputComponent.contextType = dataContext
 
 function App() {
   const [data, setData] = useState({
