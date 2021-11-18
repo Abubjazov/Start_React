@@ -1,4 +1,4 @@
-import { useState, Component, createContext } from 'react'
+import { useState, createContext, useContext } from 'react'
 import { Container } from 'react-bootstrap'
 import './App.css'
 
@@ -7,7 +7,7 @@ const dataContext = createContext({
   text: 'some text'
 })
 
-const { Provider, Consumer } = dataContext
+// const { Provider, Consumer } = dataContext
 
 const Form = (props) => {
   console.log('render')
@@ -28,34 +28,46 @@ const Form = (props) => {
   )
 }
 
-class InputComponent extends Component {
-  static contextType = dataContext
-
-  render() {
-    return (
-      // <Consumer>
-      //   {
-      //     value => {
-      //       return (
-      //         <input
-      //           value={value.mail}
-      //           type="email"
-      //           className='form-control'
-      //           id="exampleFormControlInput1"
-      //           placeholder="name@example.com" />
-      //       )
-      //     }
-      //   }
-      // </Consumer>
-      <input
-        value={this.context.mail}
-        type="email"
-        className='form-control'
-        id="exampleFormControlInput1"
-        placeholder="name@example.com" />
-    )
-  }
+const InputComponent = () => {
+  const context = useContext(dataContext)
+  return (
+    <input
+      value={context.mail}
+      type="email"
+      className='form-control'
+      id="exampleFormControlInput1"
+      placeholder="name@example.com" />
+  )
 }
+
+// class InputComponent extends Component {
+//   static contextType = dataContext
+
+//   render() {
+//     return (
+//       // <Consumer>
+//       //   {
+//       //     value => {
+//       //       return (
+//       //         <input
+//       //           value={value.mail}
+//       //           type="email"
+//       //           className='form-control'
+//       //           id="exampleFormControlInput1"
+//       //           placeholder="name@example.com" />
+//       //       )
+//       //     }
+//       //   }
+//       // </Consumer>
+// <input
+//   value={this.context.mail}
+//   type="email"
+//   className='form-control'
+//   id="exampleFormControlInput1"
+//   placeholder="name@example.com" />
+//     )
+//   }
+// }
 
 // InputComponent.contextType = dataContext
 
@@ -66,7 +78,8 @@ function App() {
   })
 
   return (
-    <Provider value={data}>
+    <>
+      {/* <Provider value={data}> */}
       <Form text={data.text} />
       <button
         onClick={() => setData({
@@ -75,7 +88,8 @@ function App() {
         })}>
         Click me
       </button>
-    </Provider>
+      {/* </Provider> */}
+    </>
   )
 }
 
