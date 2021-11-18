@@ -4,10 +4,11 @@ import './App.css'
 
 const dataContext = createContext({
   mail: "name@example.com",
-  text: 'some text'
+  text: 'some text',
+  forceChangeMail: () => { }
 })
 
-const { Provider, Consumer } = dataContext
+const { Provider } = dataContext
 
 const Form = (props) => {
   console.log('render')
@@ -37,7 +38,8 @@ const InputComponent = () => {
       type="email"
       className='form-control'
       id="exampleFormControlInput1"
-      placeholder="name@example.com" />
+      placeholder="name@example.com"
+      onFocus={context.forceChangeMail} />
   )
 }
 
@@ -73,9 +75,14 @@ const InputComponent = () => {
 // InputComponent.contextType = dataContext
 
 function App() {
+  const forceChangeMail = () => {
+    setData({ ...data, mail: 'test@mail.ru' })
+  }
+
   const [data, setData] = useState({
     mail: "name@example.com",
-    text: 'some text'
+    text: 'some text',
+    forceChangeMail
   })
 
   return (
@@ -84,7 +91,8 @@ function App() {
       <button
         onClick={() => setData({
           mail: "ame@example.com",
-          text: 'some text 2'
+          text: 'some text 2',
+          forceChangeMail
         })}>
         Click me
       </button>
