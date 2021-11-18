@@ -7,7 +7,7 @@ const dataContext = createContext({
   text: 'some text'
 })
 
-// const { Provider, Consumer } = dataContext
+const { Provider, Consumer } = dataContext
 
 const Form = (props) => {
   console.log('render')
@@ -30,6 +30,7 @@ const Form = (props) => {
 
 const InputComponent = () => {
   const context = useContext(dataContext)
+
   return (
     <input
       value={context.mail}
@@ -78,8 +79,7 @@ function App() {
   })
 
   return (
-    <>
-      {/* <Provider value={data}> */}
+    <Provider value={data}>
       <Form text={data.text} />
       <button
         onClick={() => setData({
@@ -88,8 +88,7 @@ function App() {
         })}>
         Click me
       </button>
-      {/* </Provider> */}
-    </>
+    </Provider>
   )
 }
 
