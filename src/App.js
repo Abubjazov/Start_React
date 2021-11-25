@@ -1,60 +1,163 @@
-import { useState } from 'react'
-import { Container } from 'react-bootstrap'
-import { CSSTransition } from 'react-transition-group'
-import './App.css'
+import { useFormik } from 'formik'
 
-const Modal = (props) => {
-  const duration = 300
+const validate = values => {
+    const errors = {}
 
-  return (
-    <CSSTransition
-      in={props.show}
-      timeout={duration}
-      onEnter={() => props.setShowButton(false)}
-      onExited={() => props.setShowButton(true)}
-      classNames="modal"
-      mountOnEnter
-      unmountOnExit>
-      <div
-        className="modal mt-5 d-block">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Typical modal window</h5>
-              <button onClick={() => props.onClose(false)} type="button" className="btn-close" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <p>Modal body content</p>
-            </div>
-            <div className="modal-footer">
-              <button onClick={() => props.onClose(false)} type="button" className="btn btn-secondary">Close</button>
-              <button onClick={() => props.onClose(false)} type="button" className="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </CSSTransition>
-  )
+    if (!values.name) {
+        errors.name = 'ОбЬязательное полЬе!'
+    } else if (values.name.length < 2) {
+        errors.name = 'Мунимум 2 симБола'
+    }
+
+    if (!values.email) {
+        errors.email = 'ОбЬязательное полЬе!'
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+        errors.email = 'Неправильный Email адрес'
+    }
+
+    return errors
 }
 
-function App() {
-  const [showModal, setShowModal] = useState(false);
-  const [showButton, setShowButton] = useState(true);
+const Form = () => {
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            email: '',
+            amount: 10,
+            currency: '',
+            text: '',
+            terms: false
+        },
+        validate,
+        onSubmit: values => console.log(JSON.stringify(values, null, 2))
+    })
 
-  return (
-    <Container>
-      <Modal show={showModal} onClose={setShowModal} setShowButton={setShowButton} />
-      {showButton ?
-        <button
-          type="button"
-          className="btn btn-warning mt-5"
-          onClick={() => setShowModal(true)}>Open Modal</button> : null
-      }
-    </Container>
-  );
+    return (
+        <form className="form" onSubmit={formik.handleSubmit}>
+            <h2>Отправить пожертвование</h2>
+            <label htmlFor="name">Ваше имя</label>
+            <input
+                id="name"
+                name="name"
+                type="text"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur} />
+            {formik.errors.name && formik.touched.name ? <div style={{ color: 'red' }}>{formik.errors.name}</div> : null}
+            <label htmlFor="email">Ваша почта</label>
+            <input
+                id="email"
+                name="email"
+                type="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur} />
+            {formik.errors.email && formik.touched.email ? <div style={{ color: 'red' }}>{formik.errors.email}</div> : null}
+            <label htmlFor="amount">Количество</label>
+            <input
+                id="amount"
+                name="amount"
+                type="number"
+                value={formik.values.amount}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur} />
+            <label htmlFor="currency">Валюта</label>
+            <select
+                id="currency"
+                name="currency"
+                value={formik.values.currency}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}>
+                <option value="">Выберите валюту</option>
+                <option value="USD">USD</option>
+                <option value="UAH">UAH</option>
+                <option value="RUB">RUB</option>
+            </select>
+            <label htmlFor="text">Ваше сообщение</label>
+            <textarea
+                id="text"
+                name="text"
+                value={formik.values.text}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur} />
+            <label className="checkbox">
+                <input
+                    name="terms"
+                    type="checkbox"
+                    value={formik.values.terms}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur} />
+                Соглашаетесь с политикой конфиденциальности?
+            </label>
+            <button type="submit">Отправить</button>
+        </form>
+    )
 }
 
-export default App;
+export default Form
+
+
+
+
+
+
+// import { useState } from 'react'
+// import { Container } from 'react-bootstrap'
+// import { CSSTransition } from 'react-transition-group'
+// import './App.css'
+
+// const Modal = (props) => {
+//   const duration = 300
+
+//   return (
+//     <CSSTransition
+//       in={props.show}
+//       timeout={duration}
+//       onEnter={() => props.setShowButton(false)}
+//       onExited={() => props.setShowButton(true)}
+//       classNames="modal"
+//       mountOnEnter
+//       unmountOnExit>
+//       <div
+//         className="modal mt-5 d-block">
+//         <div className="modal-dialog">
+//           <div className="modal-content">
+//             <div className="modal-header">
+//               <h5 className="modal-title">Typical modal window</h5>
+//               <button onClick={() => props.onClose(false)} type="button" className="btn-close" aria-label="Close"></button>
+//             </div>
+//             <div className="modal-body">
+//               <p>Modal body content</p>
+//             </div>
+//             <div className="modal-footer">
+//               <button onClick={() => props.onClose(false)} type="button" className="btn btn-secondary">Close</button>
+//               <button onClick={() => props.onClose(false)} type="button" className="btn btn-primary">Save changes</button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </CSSTransition>
+//   )
+// }
+
+// function App() {
+//   const [showModal, setShowModal] = useState(false);
+//   const [showButton, setShowButton] = useState(true);
+
+//   return (
+//     <Container>
+//       <Modal show={showModal} onClose={setShowModal} setShowButton={setShowButton} />
+//       {showButton ?
+//         <button
+//           type="button"
+//           className="btn btn-warning mt-5"
+//           onClick={() => setShowModal(true)}>Open Modal</button> : null
+//       }
+//     </Container>
+//   );
+// }
+
+// export default App;
 
 
 
