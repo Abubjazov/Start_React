@@ -17,7 +17,17 @@ const Form = () => {
                 .required('Обязательное поле'),
             email: Yup.string()
                 .email('Неправильный Е-маил адрес')
-                .required('Обязательное поле')
+                .required('Обязательное поле'),
+            amount: Yup.number()
+                .min(5, 'Не менее 5')
+                .required('Обязательное поле'),
+            currency: Yup.string()
+                .required('Выберите валюту'),
+            text: Yup.string()
+                .min(10, 'Не менее 10 символов'),
+            terms: Yup.boolean()
+                .required('Необходимо ваше согласие')
+                .oneOf([true], 'Необходимо ваше согласие')
         }),
         onSubmit: values => console.log(JSON.stringify(values, null, 2))
     })
@@ -51,6 +61,7 @@ const Form = () => {
                 value={formik.values.amount}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur} />
+            {formik.errors.amount && formik.touched.amount ? <div style={{ color: 'red' }}>{formik.errors.amount}</div> : null}
             <label htmlFor="currency">Валюта</label>
             <select
                 id="currency"
@@ -63,6 +74,7 @@ const Form = () => {
                 <option value="UAH">UAH</option>
                 <option value="RUB">RUB</option>
             </select>
+            {formik.errors.currency && formik.touched.currency ? <div style={{ color: 'red' }}>{formik.errors.currency}</div> : null}
             <label htmlFor="text">Ваше сообщение</label>
             <textarea
                 id="text"
@@ -70,6 +82,7 @@ const Form = () => {
                 value={formik.values.text}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur} />
+            {formik.errors.text && formik.touched.text ? <div style={{ color: 'red' }}>{formik.errors.text}</div> : null}
             <label className="checkbox">
                 <input
                     name="terms"
@@ -79,6 +92,7 @@ const Form = () => {
                     onBlur={formik.handleBlur} />
                 Соглашаетесь с политикой конфиденциальности?
             </label>
+            {formik.errors.terms && formik.touched.terms ? <div style={{ color: 'red' }}>{formik.errors.terms}</div> : null}
             <button type="submit">Отправить</button>
         </form>
     )
