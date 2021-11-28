@@ -1,6 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
+export const inc = () => ({ type: 'INC' })
+export const dec = () => ({ type: 'DEC' })
+
+export const rnd = () => {
+    const value = Math.floor(Math.random() * 10)
+
+    return { type: 'RND', payload: value }
+}
+
+//<--------------------------------------------------------------->
 
 const initState = { value: 0 }
 
@@ -20,23 +27,32 @@ const reducer = (state = initState, action) => {
     }
 }
 
+export default reducer
+
+//<--------------------------------------------------------------->
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore } from 'redux'
+import { dec, inc, rnd } from './actions'
+
+import reducer from './reducer'
+
 const store = createStore(reducer)
-const update = () => document.getElementById('counter').textContent = store.getState().value
 
-store.subscribe(update)
+const { dispatch, subscribe, getState } = store
 
-const inc = () => ({ type: 'INC' })
-const dec = () => ({ type: 'DEC' })
+const update = () => document.getElementById('counter').textContent = getState().value
 
-const rnd = () => {
-    const value = Math.floor(Math.random() * 10)
+subscribe(update)
 
-    return { type: 'RND', payload: value }
-}
+const incDispatch = () => dispatch(inc())
+const decDispatch = () => dispatch(dec())
+const rndDispatch = () => dispatch(rnd())
 
-document.getElementById('inc').addEventListener('click', () => store.dispatch(inc()))
-document.getElementById('dec').addEventListener('click', () => store.dispatch(dec()))
-document.getElementById('rnd').addEventListener('click', () => store.dispatch(rnd()))
+document.getElementById('inc').addEventListener('click', incDispatch)
+document.getElementById('dec').addEventListener('click', decDispatch)
+document.getElementById('rnd').addEventListener('click', rndDispatch)
 
 ReactDOM.render(
     <React.StrictMode>
@@ -46,10 +62,6 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 )
-
-
-
-
 
 
 // import { Formik, Form, Field, ErrorMessage, useField } from 'formik'
