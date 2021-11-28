@@ -32,7 +32,7 @@ export default reducer
 //<--------------------------------------------------------------->
 
 import { connect } from "react-redux"
-import { bindActionCreators } from "redux"
+// import { bindActionCreators } from "redux"
 import * as actions from "../actions"
 
 const Counter = ({ counter, inc, dec, rnd }) => {
@@ -46,21 +46,11 @@ const Counter = ({ counter, inc, dec, rnd }) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        counter: state.value
-    }
-}
+const mapStateToProps = (state) => ({ counter: state.value })
 
-const mapDispatchToProps = (dispatch) => {
-    // const { inc, dec, rnd } = bindActionCreators(actions, dispatch)
+// const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch)
 
-    // return { inc, dec, rnd }
-
-    return bindActionCreators(actions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Counter)
+export default connect(mapStateToProps, actions)(Counter)
 
 //<--------------------------------------------------------------->
 
