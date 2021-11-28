@@ -1,21 +1,28 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const initialState = 0
+const reducer = (state = 0, action) => {
+    switch (action.type) {
+        case 'INC':
+            return state + 1
 
-const reducer = (state, action) => {
-    if (action.type === 'INC') return state + 1
-    if (action.type === 'DEC') return state - 1
-    return 0
+        case 'DEC':
+            return state - 1
+
+        default:
+            return state
+    }
 }
 
-let state = reducer(initialState, { type: 'INC' })
+let state = reducer(undefined, { type: 'INC' })
 console.log(state)
 state = reducer(state, { type: 'INC' })
 console.log(state)
 state = reducer(state, { type: 'INC' })
 console.log(state)
 state = reducer(state, { type: 'DEC' })
+console.log(state)
+state = reducer(state, { type: 'HEX' })
 console.log(state)
 
 ReactDOM.render(
