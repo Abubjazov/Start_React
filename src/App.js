@@ -31,7 +31,11 @@ export default reducer
 
 //<--------------------------------------------------------------->
 
-export const Counter = ({ counter, inc, dec, rnd }) => {
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
+import * as actions from "../actions"
+
+const Counter = ({ counter, inc, dec, rnd }) => {
     return (
         <div className="jumbotron">
             <h1>{counter}</h1>
@@ -42,37 +46,52 @@ export const Counter = ({ counter, inc, dec, rnd }) => {
     )
 }
 
+const mapStateToProps = (state) => {
+    return {
+        counter: state.value
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    // const { inc, dec, rnd } = bindActionCreators(actions, dispatch)
+
+    // return { inc, dec, rnd }
+
+    return bindActionCreators(actions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter)
+
+//<--------------------------------------------------------------->
+
+import Counter from "./components/Counter";
+
+const App = () => {
+    return <Counter />
+}
+
+export default App
+
 //<--------------------------------------------------------------->
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, bindActionCreators } from 'redux'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 
-import * as actions from './actions'
-import { Counter } from './Counter'
+import App from './App'
 import reducer from './reducer'
 
 const store = createStore(reducer)
-const { dispatch, subscribe, getState } = store
 
-const { inc, dec, rnd } = bindActionCreators(actions, dispatch)
-
-const update = () => {
-    ReactDOM.render(
-        <React.StrictMode>
-            <Counter
-                counter={getState().value}
-                inc={inc}
-                dec={dec}
-                rnd={rnd}
-            />
-        </React.StrictMode>,
-        document.getElementById('root')
-    )
-}
-
-update()
-subscribe(update)
+ReactDOM.render(
+    <React.StrictMode>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+)
 
 
 // import { Formik, Form, Field, ErrorMessage, useField } from 'formik'
