@@ -34,21 +34,21 @@ export default reducer
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
-import { dec, inc, rnd } from './actions'
 
+import { dec, inc, rnd } from './actions'
 import reducer from './reducer'
 
 const store = createStore(reducer)
-
 const { dispatch, subscribe, getState } = store
 
 const update = () => document.getElementById('counter').textContent = getState().value
-
 subscribe(update)
 
-const incDispatch = () => dispatch(inc())
-const decDispatch = () => dispatch(dec())
-const rndDispatch = () => dispatch(rnd())
+const bindActionCreator = (creator, dispatch) => (...args) => dispatch(creator(...args))
+
+const incDispatch = bindActionCreator(inc, dispatch)
+const decDispatch = bindActionCreator(dec, dispatch)
+const rndDispatch = bindActionCreator(rnd, dispatch)
 
 document.getElementById('inc').addEventListener('click', incDispatch)
 document.getElementById('dec').addEventListener('click', decDispatch)
