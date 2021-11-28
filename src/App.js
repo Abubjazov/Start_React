@@ -35,7 +35,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, bindActionCreators } from 'redux'
 
-import { dec, inc, rnd } from './actions'
+import * as actions from './actions'
 import reducer from './reducer'
 
 const store = createStore(reducer)
@@ -44,15 +44,11 @@ const { dispatch, subscribe, getState } = store
 const update = () => document.getElementById('counter').textContent = getState().value
 subscribe(update)
 
-const { incDispatch, decDispatch, rndDispatch } = bindActionCreators({
-    incDispatch: inc,
-    decDispatch: dec,
-    rndDispatch: rnd
-}, dispatch)
+const { inc, dec, rnd } = bindActionCreators(actions, dispatch)
 
-document.getElementById('inc').addEventListener('click', incDispatch)
-document.getElementById('dec').addEventListener('click', decDispatch)
-document.getElementById('rnd').addEventListener('click', rndDispatch)
+document.getElementById('inc').addEventListener('click', inc)
+document.getElementById('dec').addEventListener('click', dec)
+document.getElementById('rnd').addEventListener('click', rnd)
 
 ReactDOM.render(
     <React.StrictMode>
