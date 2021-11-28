@@ -31,33 +31,48 @@ export default reducer
 
 //<--------------------------------------------------------------->
 
+export const Counter = ({ counter, inc, dec, rnd }) => {
+    return (
+        <div className="jumbotron">
+            <h1>{counter}</h1>
+            <button onClick={dec} className="btn btn-primary ml2">DEC</button>
+            <button onClick={inc} className="btn btn-primary ml2">INC</button>
+            <button onClick={rnd} className="btn btn-primary ml2">RND</button>
+        </div>
+    )
+}
+
+//<--------------------------------------------------------------->
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, bindActionCreators } from 'redux'
 
 import * as actions from './actions'
+import { Counter } from './Counter'
 import reducer from './reducer'
 
 const store = createStore(reducer)
 const { dispatch, subscribe, getState } = store
 
-const update = () => document.getElementById('counter').textContent = getState().value
-subscribe(update)
-
 const { inc, dec, rnd } = bindActionCreators(actions, dispatch)
 
-document.getElementById('inc').addEventListener('click', inc)
-document.getElementById('dec').addEventListener('click', dec)
-document.getElementById('rnd').addEventListener('click', rnd)
+const update = () => {
+    ReactDOM.render(
+        <React.StrictMode>
+            <Counter
+                counter={getState().value}
+                inc={inc}
+                dec={dec}
+                rnd={rnd}
+            />
+        </React.StrictMode>,
+        document.getElementById('root')
+    )
+}
 
-ReactDOM.render(
-    <React.StrictMode>
-        <>
-
-        </>
-    </React.StrictMode>,
-    document.getElementById('root')
-)
+update()
+subscribe(update)
 
 
 // import { Formik, Form, Field, ErrorMessage, useField } from 'formik'
