@@ -33,7 +33,7 @@ export default reducer
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, bindActionCreators } from 'redux'
 
 import { dec, inc, rnd } from './actions'
 import reducer from './reducer'
@@ -44,11 +44,9 @@ const { dispatch, subscribe, getState } = store
 const update = () => document.getElementById('counter').textContent = getState().value
 subscribe(update)
 
-const bindActionCreator = (creator, dispatch) => (...args) => dispatch(creator(...args))
-
-const incDispatch = bindActionCreator(inc, dispatch)
-const decDispatch = bindActionCreator(dec, dispatch)
-const rndDispatch = bindActionCreator(rnd, dispatch)
+const incDispatch = bindActionCreators(inc, dispatch)
+const decDispatch = bindActionCreators(dec, dispatch)
+const rndDispatch = bindActionCreators(rnd, dispatch)
 
 document.getElementById('inc').addEventListener('click', incDispatch)
 document.getElementById('dec').addEventListener('click', decDispatch)
