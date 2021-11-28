@@ -10,19 +10,25 @@ const reducer = (state = 0, action) => {
         case 'DEC':
             return state - 1
 
+        case 'RND':
+            return state * action.payload
+
         default:
             return state
     }
 }
 
 const store = createStore(reducer)
+const update = () => document.getElementById('counter').textContent = store.getState()
 
-store.subscribe(() => console.log(store.getState()))
+store.subscribe(update)
 
-store.dispatch({ type: 'INC' })
-store.dispatch({ type: 'INC' })
-store.dispatch({ type: 'DEC' })
-store.dispatch({ type: 'HEX' })
+document.getElementById('inc').addEventListener('click', () => store.dispatch({ type: 'INC' }))
+document.getElementById('dec').addEventListener('click', () => store.dispatch({ type: 'DEC' }))
+document.getElementById('rnd').addEventListener('click', () => {
+    const value = Math.floor(Math.random() * 10)
+    store.dispatch({ type: 'RND', payload: value })
+})
 
 ReactDOM.render(
     <React.StrictMode>
