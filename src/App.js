@@ -16,19 +16,13 @@ const reducer = (state = 0, action) => {
 }
 
 const store = createStore(reducer)
-console.log(store.getState())
+
+store.subscribe(() => console.log(store.getState()))
 
 store.dispatch({ type: 'INC' })
-console.log(store.getState())
-
 store.dispatch({ type: 'INC' })
-console.log(store.getState())
-
 store.dispatch({ type: 'DEC' })
-console.log(store.getState())
-
 store.dispatch({ type: 'HEX' })
-console.log(store.getState())
 
 ReactDOM.render(
     <React.StrictMode>
