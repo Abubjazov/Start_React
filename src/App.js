@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { createStore } from 'redux'
 
 const reducer = (state = 0, action) => {
     switch (action.type) {
@@ -14,16 +15,20 @@ const reducer = (state = 0, action) => {
     }
 }
 
-let state = reducer(undefined, { type: 'INC' })
-console.log(state)
-state = reducer(state, { type: 'INC' })
-console.log(state)
-state = reducer(state, { type: 'INC' })
-console.log(state)
-state = reducer(state, { type: 'DEC' })
-console.log(state)
-state = reducer(state, { type: 'HEX' })
-console.log(state)
+const store = createStore(reducer)
+console.log(store.getState())
+
+store.dispatch({ type: 'INC' })
+console.log(store.getState())
+
+store.dispatch({ type: 'INC' })
+console.log(store.getState())
+
+store.dispatch({ type: 'DEC' })
+console.log(store.getState())
+
+store.dispatch({ type: 'HEX' })
+console.log(store.getState())
 
 ReactDOM.render(
     <React.StrictMode>
